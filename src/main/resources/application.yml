@@ -1,0 +1,16 @@
+app:
+  datasource:
+    jdbc-url: jdbc:postgresql://localhost:5432/airlineTickets
+    username: postgres
+    password: pass123
+    pool-size: 30
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-aut: create-drop
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#    database: postgresql
+#    database-platform: org.hibernate.dialect.postgreSQLDialect
