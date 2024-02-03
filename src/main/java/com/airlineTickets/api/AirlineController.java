@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RequestMapping("/api/v1/airline")
 @RestController
+@CrossOrigin
 public class AirlineController {
     private final AirlineService airlineService;
 
