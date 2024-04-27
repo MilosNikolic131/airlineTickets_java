@@ -70,10 +70,10 @@ public class AirlineService {
         }
     }
 
-    public int reserveFlight(UUID userId, UUID flightId, int numOfSeats) {
+    public int reserveFlight(Reservation reservation) {
         boolean hasRole = AirlineService.checkRoles(List.of(UserType.Visitor, UserType.Admin));
         if (hasRole){
-            return airlineDAO.reserveFlight(userId, flightId, numOfSeats);
+            return airlineDAO.reserveFlight(reservation);
         }
 
         return -1;

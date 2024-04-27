@@ -50,13 +50,13 @@ public class AirlineController {
     }
 
     @PostMapping("reservation")
-    public int reserveFlight(UUID userId, UUID flightId, int numOfSeats) {
-        return airlineService.reserveFlight(userId, flightId, numOfSeats);
+    public int reserveFlight(@Valid @NonNull @RequestBody Reservation reservation) {
+        return airlineService.reserveFlight(reservation);
     }
 
     @PutMapping("flight")
-    public int cancelFlight(UUID flightId) {
-        return airlineService.cancelFlight(flightId);
+    public int cancelFlight(@Valid @NonNull @RequestBody Flight flight) {
+        return airlineService.cancelFlight(flight.getFlightId());
     }
 
     @GetMapping("reservation/{id}")

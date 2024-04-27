@@ -79,37 +79,35 @@ public class AirlinePersonDataAccessService implements AirlineDAO{
 
     @Override
     public int cancelFlight(UUID flightId) {
-        String sql = "UPDATE flight SET flighStatus = 'Cancelled' where flightid = '?'";
-        return jdbcTemplate.update(sql,
-                new Object[]{flightId});
+        String sql = "UPDATE flight SET flightStatus = 'Cancelled' where flightid = '" + flightId + "'";
+        return jdbcTemplate.update(sql);
     }
 
     @Override
     public void approveResrevation(UUID flightId, UUID userId) {
-        String sql = "UPDATE reservation set approved = 1 WHERE flightId = '?' AND userId = '?'";
-        jdbcTemplate.update(sql,
-                new Object[]{flightId, userId});
+        String sql = "UPDATE reservation set approved = 'true' WHERE flightId = '" + flightId + "' AND userId = '" + userId + "'";
+        jdbcTemplate.update(sql);
     }
 
     @Override
-    public int reserveFlight(UUID userId, UUID flightId, int numOfSeats) {
-        Flight flight = this.getFlightById(flightId);
+    public int reserveFlight(Reservation reservation) {
+        Flight flight = this.getFlightById(reservation.getFlightId());
         Date date = new Date();
 //        long diffInMillies = Math.abs(date.getTime() - flight.getFlightDate().getTime());
-        long diff = ChronoUnit.DAYS.between(LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault()), LocalDate.ofInstant(flight.getFlightDate().toInstant(), ZoneId.systemDefault()));
-        if (diff < 3) {
-            return 1;
-        }
+//        long diff = ChronoUnit.DAYS.between(LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault()), LocalDate.ofInstant(flight.getFlightDate().toInstant(), ZoneId.systemDefault()));
+//        if (diff < 3) {
+//            return 1;
+//        }
         String sql = "INSERT INTO reservation (userid, flightid, numofreservedseats, approved) VALUES (?, ?, ?, ?)";
         return jdbcTemplate.update(sql,
-                new Object[]{userId, flightId, numOfSeats, 0});
+                new Object[]{reservation.getUserId(), reservation.getFlightId(), reservation.getNumOfReservedSeats(), false});
     }
 
     @Override
     public List<Reservation> getReservationsById(UUID userId) {
-        String sql = "Select userid, flightid, numOfReservedSeats, approved FROM reservation WHERE userid = '" + userId + "'";
+        String sql = "Select userid, flightId, numOfReservedSeats, approved FROM reservation WHERE userid = '" + userId + "'";
         List<Reservation> list = jdbcTemplate.query(sql, (resultSet, i) -> {
-            return new Reservation(UUID.fromString(resultSet.getString(1)), UUID.fromString(resultSet.getString(2)), resultSet.getInt(3), resultSet.getInt(4) == 1);
+            return new Reservation(UUID.fromString(resultSet.getString(1)), UUID.fromString(resultSet.getString(2)), resultSet.getInt(3), resultSet.getBoolean(4));
         });
 
         return list;

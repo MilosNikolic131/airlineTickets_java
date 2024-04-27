@@ -31,7 +31,7 @@ public interface AirlineDAO {
 
     void approveResrevation(UUID flightId, UUID userId);
 
-    int reserveFlight(UUID userId, UUID flightId, int numOfSeats);
+    int reserveFlight(Reservation reservation);
 
     List<Reservation> getReservationsById(UUID userId);
 
